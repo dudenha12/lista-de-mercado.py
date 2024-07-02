@@ -66,3 +66,4 @@ class Supermercado:
 
 mercado = Supermercado()
 mercado.comprar()
+ fazer em xt
