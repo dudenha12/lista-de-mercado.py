@@ -82,3 +82,4 @@ class Supermercado:
 
 mercado = Supermercado()
 mercado.comprar()
+cadastro de funcionario
