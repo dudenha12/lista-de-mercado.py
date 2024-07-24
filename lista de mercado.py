@@ -58,12 +58,27 @@ class Supermercado:
                     print(f'Nota fiscal: Total da compra - R${self.total:.2f} | CPF - {cpf}')
                 else:
                     print(f'Nota fiscal: Total da compra - R${self.total:.2f}')
+                    arquivo.write('Data:')
+                    arquivo.write(str(data))
+
                 print('Compra concluída!')
                 self.catalogo = {'arroz': 10.0, 'feijao': 8.5, 'macarrao': 5.0, 'carne': 25.0}
                 self.carrinho = {}
                 self.total = 0.0
+
+                import datetime
+                data_atual = datetime.date.today()
+                data = data_atual.strftime("%d/%m/%Y")
+
+                arquivo=open("notafiscal.txt","a")
+                arquivo.write("cpf = ")
+                arquivo.write(cpf)
+                arquivo.write('\n')
+                arquivo.write('Data:')
+                arquivo.write(str(data))
+                arquivo.write('\n')
+                arquivo.close
                 return
 
 mercado = Supermercado()
 mercado.comprar()
- fazer em xt
