@@ -10,7 +10,7 @@ class Supermercado:
             for produto, preco in self.catalogo.items():
                 print(f'{produto.capitalize()} - R${preco:.2f}')
 
-            escolha = input('Digite o nome do produto que deseja comprar (ou "sair para encerrar): ')
+            escolha = input('Digite o nome do produto que deseja comprar (ou "sair" para encerrar): ')
             if escolha.lower() == 'sair':
                 break
 
@@ -58,28 +58,30 @@ class Supermercado:
                     print(f'Nota fiscal: Total da compra - R${self.total:.2f} | CPF - {cpf}')
                 else:
                     print(f'Nota fiscal: Total da compra - R${self.total:.2f}')
-                    arquivo.write('Data:')
-                    arquivo.write(str(data))
-
-                print('Compra concluída!')
-                self.catalogo = {'arroz': 10.0, 'feijao': 8.5, 'macarrao': 5.0, 'carne': 25.0}
-                self.carrinho = {}
-                self.total = 0.0
 
                 import datetime
                 data_atual = datetime.date.today()
                 data = data_atual.strftime("%d/%m/%Y")
 
-                arquivo=open("notafiscal.txt","a")
-                arquivo.write("cpf = ")
-                arquivo.write(cpf)
+                arquivo = open("notafiscal.txt", "a")
+                arquivo.write("CPF: ")
+                if cpf_nota.lower() == 'sim':
+                    arquivo.write(cpf)
+                else:
+                    arquivo.write("Não informado")
                 arquivo.write('\n')
-                arquivo.write('Data:')
+                arquivo.write('Data: ')
                 arquivo.write(str(data))
                 arquivo.write('\n')
-                arquivo.close
+                arquivo.write('Total da compra: R$')
+                arquivo.write(str(self.total))
+                arquivo.write('\n\n')
+                arquivo.close()
+                print('Compra concluída!')
+                self.catalogo = {'arroz': 10.0, 'feijao': 8.5, 'macarrao': 5.0, 'carne': 25.0}
+                self.carrinho = {}
+                self.total = 0.0
                 return
 
 mercado = Supermercado()
 mercado.comprar()
-cadastro de funcionario
