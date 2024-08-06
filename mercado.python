@@ -1,0 +1,112 @@
+class Supermercado:
+    def __init__(self):
+        self.catalogo = {
+            1: {'produto': 'Arroz integral', 'preço': 10.0},
+            2: {'produto': 'Pote de sorvete de maracujá 3l', 'preço': 50.0},
+            3: {'produto': 'Pote de sorvete de chocolate 2l', 'preço': 25.0},
+            4: {'produto': 'Pote de sorvete de morango 3l', 'preço': 40.0},
+            5: {'produto': 'Coca-cola 2l', 'preço': 12.0},
+            6: {'produto': 'Fanta latinha', 'preço': 3.5},
+            7: {'produto': 'Guaraná latinha', 'preço': 4.5},
+            8: {'produto': 'Coca-cola latinha', 'preço': 5.0},
+            9: {'produto': 'Bolo de morango/inteiro', 'preço': 30.0},
+            10: {'produto': 'Bolo de chocolate/inteiro', 'preço': 40.0},
+            11: {'produto': 'Pão de queijo/cada', 'preço': 1.0},
+            12: {'produto': 'Feijão /kg', 'preço': 8.0},
+            13: {'produto': 'Carne de porco/2kg', 'preço': 30.0},
+            14: {'produto': 'Pacote de peito de frango', 'preço': 18.0},
+            15: {'produto': 'Cheetos assado/23g', 'preço': 6.0},
+            16: {'produto': 'Doritos', 'preço': 6.0},
+            17: {'produto': 'Fandangos', 'preço': 5.0},
+            18: {'produto': 'Nestle/clássico', 'preço': 3.5},
+            19: {'produto': 'Lacta/clássico', 'preço': 5.0}
+        }
+        self.carrinho = {}
+        self.total = 0.0
+
+    def comprar(self):
+        while True:
+            print('Catálogo de produtos:')
+            for codigo, detalhes in self.catalogo.items():
+                print(f'{codigo} - {detalhes["produto"]} - R${detalhes["preço"]:.2f}')
+
+            escolha = input('Digite o código do produto que deseja comprar (ou "sair" para encerrar): ')
+            if escolha.lower() == 'sair':
+                break
+
+            try:
+                escolha = int(escolha)
+                if escolha in self.catalogo:
+                    quantidade = int(input('Digite a quantidade desejada: '))
+                    if escolha in self.carrinho:
+                        self.carrinho[escolha] += quantidade
+                    else:
+                        self.carrinho[escolha] = quantidade
+                    print(f'{quantidade} unidade(s) de {self.catalogo[escolha]["produto"]} adicionada(s) ao carrinho.')
+                else:
+                    print('Produto não encontrado no catálogo. Tente novamente.')
+            except ValueError:
+                print('Entrada inválida. Digite um número válido ou "sair".')
+
+        print('\nResumo da compra:')
+        for codigo, quantidade in self.carrinho.items():
+            produto = self.catalogo[codigo]["produto"]
+            preco_unitario = self.catalogo[codigo]["preço"]
+            preco_total = preco_unitario * quantidade
+            print(f'{quantidade} unidades de {produto} - R${preco_total:.2f}')
+            self.total += preco_total
+
+        print(f'Total da compra: R${self.total:.2f}')
+        self.pagar()
+
+    def pagar(self):
+        while True:
+            pagamento = input('Digite o valor recebido pelo cliente (ou "cancelar" para cancelar a compra): ')
+            if pagamento.lower() == 'cancelar':
+                print('Compra cancelada.')
+                self.carrinho = {}
+                self.total = 0.0
+                return
+
+            try:
+                valor_pago = float(pagamento)
+                troco = valor_pago - self.total
+
+                if troco < 0:
+                    print(f'Valor insuficiente. Faltam R${-troco:.2f}.')
+                else:
+                    if troco > 0:
+                        print(f'Troco: R${troco:.2f}')
+                    cpf_nota = input('Deseja informar o CPF na nota fiscal? (sim/não): ')
+                    if cpf_nota.lower() == 'sim':
+                        cpf = input('Digite o CPF: ')
+                        print(f'Nota fiscal: Total da compra - R${self.total:.2f} | CPF - {cpf}')
+                    else:
+                        print(f'Nota fiscal: Total da compra - R${self.total:.2f}')
+
+                    import datetime
+                    data_atual = datetime.date.today()
+                    data = data_atual.strftime("%d/%m/%Y")
+
+                    with open("notafiscal.txt", "a") as arquivo:
+                        arquivo.write("CPF: ")
+                        if cpf_nota.lower() == 'sim':
+                            arquivo.write(cpf)
+                        else:
+                            arquivo.write("Não informado")
+                        arquivo.write('\n')
+                        arquivo.write('Data: ')
+                        arquivo.write(str(data))
+                        arquivo.write('\n')
+                        arquivo.write(f'Total da compra: R${self.total:.2f}\n\n')
+
+                    print('Compra concluída!')
+                    self.carrinho = {}
+                    self.total = 0.0
+                    return
+
+            except ValueError:
+                print('Valor inválido. Digite um número válido ou "cancelar".')
+
+mercado = Supermercado()
+mercado.comprar()
