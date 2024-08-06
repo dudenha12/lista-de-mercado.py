@@ -1,0 +1,45 @@
+# Cadastro de Clientes
+
+clientes = {}
+
+def cadastrar_cliente():
+    nome = input("Digite o nome do cliente: ")
+    email = input("Digite o email do cliente: ")
+    senha = input("Digite a senha do cliente: ")
+    
+    clientes[email] = {
+        "nome": nome,
+        "senha": senha
+    }
+    
+    print("Cliente cadastrado com sucesso!")
+
+def entrar():
+    email = input("Digite o email do cliente: ")
+    senha = input("Digite a senha do cliente: ")
+    
+    if email in clientes and clientes[email]["senha"] == senha:
+        print("Login efetuado com sucesso!")
+    else:
+        print("Email ou senha incorretos. Tente novamente.")
+
+def main():
+    while True:
+        print("1. Cadastrar Cliente")
+        print("2. Entrar")
+        print("3. Sair")
+        
+        opcao = input("Digite a opção desejada: ")
+        
+        if opcao == "1":
+            cadastrar_cliente()
+        elif opcao == "2":
+            entrar()
+        elif opcao == "3":
+            print("Saindo do sistema. Até logo!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+if __name__ == "__main__":
+    main()
