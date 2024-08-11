@@ -25,7 +25,7 @@ class Supermercado:
         self.total = 0.0
 
     def boas_vindas(self):
-        print('Bem-vindo ao Mercado Dudão Fritas!')
+        print('Bem-vindo ao Mercado Dudão!')
         print('Você pode escolher os produtos do nosso catálogo a seguir.')
 
     def adicionar_produto(self, codigo, quantidade):
@@ -49,37 +49,6 @@ class Supermercado:
         else:
             print('Produto não encontrado no carrinho.')
 
-    def comprar(self):
-        self.boas_vindas()
-        while True:
-            print('\nCatálogo de produtos:')
-            for codigo, detalhes in self.catalogo.items():
-                print(f'{codigo} - {detalhes["produto"]} - R${detalhes["preço"]:.2f}')
-
-            print('\n1 - Adicionar produto ao carrinho')
-            print('2 - Remover produto do carrinho')
-            print('3 - Finalizar compra')
-            print('Digite "sair" para encerrar o programa.')
-
-            escolha = input('Escolha uma opção: ').strip().lower()
-
-            if escolha == 'sair':
-                break
-            elif escolha == '1':
-                codigo = int(input('Digite o código do produto: '))
-                quantidade = int(input('Digite a quantidade desejada: '))
-                self.adicionar_produto(codigo, quantidade)
-            elif escolha == '2':
-                codigo = int(input('Digite o código do produto a remover: '))
-                quantidade = int(input('Digite a quantidade a remover: '))
-                self.remover_produto(codigo, quantidade)
-            elif escolha == '3':
-                self.resumir_compra()
-                self.pagar()
-                break
-            else:
-                print('Opção inválida. Tente novamente.')
-
     def resumir_compra(self):
         print('\nResumo da compra:')
         self.total = 0.0
@@ -92,16 +61,22 @@ class Supermercado:
 
     def pagar(self):
         while True:
-            print('\nDigite "Cancelar" para cancelar a compra ou "Pagar" para finalizar o pagamento.')
-
-            escolha = input('Escolha uma opção: ').strip().lower()
-            if escolha == 'cancelar':
+            self.resumir_compra()
+            
+            print('\nEscolha uma opção:')
+            print('1 - Pagar')
+            print('2 - Alterar carrinho')
+            print('3 - Cancelar compra')
+            
+            escolha = input('Digite a opção desejada: ').strip().lower()
+            
+            if escolha == '3':
                 print('Compra cancelada.')
                 self.carrinho = {}
                 self.total = 0.0
                 return
 
-            elif escolha == 'pagar':
+            elif escolha == '1':
                 while True:
                     pagamento = input('Digite o valor recebido pelo cliente: ')
                     try:
@@ -154,8 +129,61 @@ class Supermercado:
                     except ValueError:
                         print('Valor inválido. Digite um número válido.')
 
+            elif escolha == '2':
+                while True:
+                    print('\nEscolha uma opção:')
+                    print('1 - Adicionar produto ao carrinho')
+                    print('2 - Remover produto do carrinho')
+                    print('3 - Voltar para o menu de pagamento')
+
+                    opcao_alterar = input('Digite a opção desejada: ').strip().lower()
+                    if opcao_alterar == '1':
+                        codigo = int(input('Digite o código do produto: '))
+                        quantidade = int(input('Digite a quantidade desejada: '))
+                        self.adicionar_produto(codigo, quantidade)
+                    elif opcao_alterar == '2':
+                        codigo = int(input('Digite o código do produto a remover: '))
+                        quantidade = int(input('Digite a quantidade a remover: '))
+                        self.remover_produto(codigo, quantidade)
+                    elif opcao_alterar == '3':
+                        break
+                    else:
+                        print('Opção inválida. Tente novamente.')
+
             else:
-                print('Opção inválida. Digite "Cancelar" ou "Pagar".')
+                print('Opção inválida. Digite "1" para pagar, "2" para alterar o carrinho ou "3" para cancelar a compra.')
+
+    def comprar(self):
+        self.boas_vindas()
+        while True:
+            print('\nCatálogo de produtos:')
+            for codigo, detalhes in self.catalogo.items():
+                print(f'{codigo} - {detalhes["produto"]} - R${detalhes["preço"]:.2f}')
+
+            print('\nEscolha uma opção:')
+            print('1 - Adicionar produto ao carrinho')
+            print('2 - Remover produto do carrinho')
+            print('3 - Finalizar compra')
+            print('Digite "sair" para encerrar o programa.')
+
+            escolha = input('Digite a opção desejada: ').strip().lower()
+
+            if escolha == 'sair':
+                break
+            elif escolha == '1':
+                codigo = int(input('Digite o código do produto: '))
+                quantidade = int(input('Digite a quantidade desejada: '))
+                self.adicionar_produto(codigo, quantidade)
+            elif escolha == '2':
+                codigo = int(input('Digite o código do produto a remover: '))
+                quantidade = int(input('Digite a quantidade a remover: '))
+                self.remover_produto(codigo, quantidade)
+            elif escolha == '3':
+                self.pagar()
+                break
+            else:
+                print('Opção inválida. Tente novamente.')
 
 mercado = Supermercado()
 mercado.comprar()
+
