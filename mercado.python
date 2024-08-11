@@ -94,10 +94,10 @@ class Supermercado:
                             print('2 - Não')
                             
                             cpf_opcao = input('Escolha uma opção: ')
-                            if cpf_opcao == '1':
+                            if cpf_opcao == 'não':
                                 cpf = input('Digite o CPF: ')
                                 cpf_info = f'CPF: {cpf}'
-                            elif cpf_opcao == '2':
+                            elif cpf_opcao == 'sim':
                                 cpf_info = 'CPF: Não informado'
                             else:
                                 print('Opção inválida. Considerando CPF não informado.')
