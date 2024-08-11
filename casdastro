@@ -10,16 +10,36 @@ def cadastrar_cliente():
         "senha": senha
     }
     
+    with open("clientes.txt", "a") as arquivo:
+        arquivo.write(f'Email: {email}\nNome: {nome}\nSenha: {senha}\n\n')
+    
     print("Cliente cadastrado com sucesso!")
 
 def entrar():
     email = input("Digite o email do cliente: ")
     senha = input("Digite a senha do cliente: ")
     
-    if email in clientes and clientes[email]["senha"] == senha:
+    clientes_lidos = {}
+    try:
+        with open("clientes.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+            for i in range(0, len(linhas), 4):
+                email_lido = linhas[i].strip().split(": ")[1]
+                nome_lido = linhas[i+1].strip().split(": ")[1]
+                senha_lida = linhas[i+2].strip().split(": ")[1]
+                clientes_lidos[email_lido] = {
+                    "nome": nome_lido,
+                    "senha": senha_lida
+                }
+    except FileNotFoundError:
+        print("Arquivo de clientes não encontrado. Nenhum cliente cadastrado.")
+    
+    if email in clientes_lidos and clientes_lidos[email]["senha"] == senha:
         print("Login efetuado com sucesso!")
+
         import mercado
-        mercado
+        mercado = mercado.Supermercado() 
+        mercado.comprar()
     else:
         print("Email ou senha incorretos. Tente novamente.")
     
