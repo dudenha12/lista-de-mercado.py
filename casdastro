@@ -1,4 +1,5 @@
 clientes = {}
+
 def cadastrar_cliente():
     nome = input("Digite o nome do cliente: ")
     email = input("Digite o email do cliente: ")
@@ -21,7 +22,7 @@ def entrar():
         mercado
     else:
         print("Email ou senha incorretos. Tente novamente.")
-
+    
 def main():
     while True:
         print("1. Cadastrar Cliente")
