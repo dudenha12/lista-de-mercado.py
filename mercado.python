@@ -25,7 +25,7 @@ class Supermercado:
         self.total = 0.0
 
     def boas_vindas(self):
-        print('Bem Vindo ao Mercado Dudão Fritas!')
+        print('Bem-vindo ao Mercado Dudão Fritas!')
         print('Você pode escolher os produtos do nosso catálogo a seguir.')
 
     def comprar(self):
@@ -65,18 +65,16 @@ class Supermercado:
 
     def pagar(self):
         while True:
-            print('\nDigite o valor recebido do cliente:')
-            print('1 - Cancelar')
-            print('2 - Pagar')
+            print('\nDigite "Cancelar" para cancelar a compra ou "Pagar" para finalizar o pagamento.')
 
-            escolha = input('Escolha uma opção: ')
-            if escolha == '1':
+            escolha = input('Escolha uma opção: ').strip().lower()
+            if escolha == 'cancelar':
                 print('Compra cancelada.')
                 self.carrinho = {}
                 self.total = 0.0
                 return
 
-            elif escolha == '2':
+            elif escolha == 'pagar':
                 while True:
                     pagamento = input('Digite o valor recebido pelo cliente: ')
                     try:
@@ -90,15 +88,14 @@ class Supermercado:
                                 print(f'Troco: R${troco:.2f}')
                             
                             print('\nDeseja informar o CPF na nota?')
-                            print('1 - Sim')
-                            print('2 - Não')
-                            
-                            cpf_opcao = input('Escolha uma opção: ')
+                            print('Digite "Sim" para informar o CPF ou "Não" para não informar.')
+
+                            cpf_opcao = input('Escolha uma opção: ').strip().lower()
                             if cpf_opcao == 'não':
-                                cpf = input('Digite o CPF: ')
-                                cpf_info = f'CPF: {cpf}'
-                            elif cpf_opcao == 'sim':
                                 cpf_info = 'CPF: Não informado'
+                            elif cpf_opcao == 'sim':
+                                cpf = input('Digite o CPF: ').strip()
+                                cpf_info = f'CPF: {cpf}'
                             else:
                                 print('Opção inválida. Considerando CPF não informado.')
                                 cpf_info = 'CPF: Não informado'
@@ -131,7 +128,8 @@ class Supermercado:
                         print('Valor inválido. Digite um número válido.')
 
             else:
-                print('Opção inválida. Digite 1 para cancelar ou 2 para pagar.')
+                print('Opção inválida. Digite "Cancelar" ou "Pagar".')
 
 mercado = Supermercado()
 mercado.comprar()
+
