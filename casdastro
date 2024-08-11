@@ -1,7 +1,4 @@
-# Cadastro de Clientes
-
 clientes = {}
-
 def cadastrar_cliente():
     nome = input("Digite o nome do cliente: ")
     email = input("Digite o email do cliente: ")
@@ -20,6 +17,8 @@ def entrar():
     
     if email in clientes and clientes[email]["senha"] == senha:
         print("Login efetuado com sucesso!")
+        import mercado
+        mercado
     else:
         print("Email ou senha incorretos. Tente novamente.")
 
