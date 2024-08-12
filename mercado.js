@@ -26,6 +26,8 @@ class Supermercado {
         };
         this.carrinho = {};
         this.total = 0.0;
+        this.cliente = null;
+        this.senhas = {}; // Para armazenar senhas dos clientes
         this.rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
@@ -34,7 +36,45 @@ class Supermercado {
 
     boasVindas() {
         console.log('Bem-vindo ao Mercado Dudão!');
-        console.log('Você pode escolher os produtos do nosso catálogo a seguir.');
+    }
+
+    mostrarCatalogo() {
+        console.log('\nCatálogo de produtos:');
+        for (const [codigo, detalhes] of Object.entries(this.catalogo)) {
+            console.log(`${codigo} - ${detalhes.produto} - R$${detalhes.preço.toFixed(2)}`);
+        }
+    }
+
+    cadastrarCliente() {
+        console.log('\nCadastro do Cliente:');
+        this.rl.question('Nome: ', (nome) => {
+            this.rl.question('Telefone: ', (telefone) => {
+                this.rl.question('E-mail: ', (email) => {
+                    this.rl.question('Senha: ', (senha) => {
+                        this.senhas[email] = senha;
+                        this.cliente = { nome, telefone, email };
+                        console.log('Cadastro realizado com sucesso.');
+                        this.comprar();
+                    });
+                });
+            });
+        });
+    }
+
+    loginCliente() {
+        console.log('\nLogin do Cliente:');
+        this.rl.question('E-mail: ', (email) => {
+            this.rl.question('Senha: ', (senha) => {
+                if (this.senhas[email] === senha) {
+                    this.cliente = { email }; 
+                    console.log('Login realizado com sucesso.');
+                    this.comprar();
+                } else {
+                    console.log('E-mail ou senha incorretos.');
+                    this.loginCliente(); // Repetir login se falhar
+                }
+            });
+        });
     }
 
     adicionarProduto(codigo, quantidade) {
@@ -134,12 +174,13 @@ class Supermercado {
         console.log(`Total da compra - R$${this.total.toFixed(2)}`);
         console.log(cpfInfo);
         console.log('Compra concluída');
-
+        
         const dataAtual = new Date();
         const data = dataAtual.toLocaleDateString('pt-BR');
 
         const notaFiscal = [
             `Data: ${data}`,
+            this.cliente ? `Cliente: ${this.cliente.nome} - Telefone: ${this.cliente.telefone} - E-mail: ${this.cliente.email}` : 'Cliente: Não cadastrado',
             cpfInfo,
             'Resumo da compra:'
         ];
@@ -165,7 +206,7 @@ class Supermercado {
         console.log('\nEscolha uma opção:');
         console.log('1 - Adicionar produto ao carrinho');
         console.log('2 - Remover produto do carrinho');
-        console.log('3 - Voltar para o menu de pagamento');
+        console.log('3 - Voltar para o menu principal');
 
         this.rl.question('Digite a opção desejada: ', (opcaoAlterar) => {
             if (opcaoAlterar === '1') {
@@ -187,7 +228,7 @@ class Supermercado {
                     });
                 });
             } else if (opcaoAlterar === '3') {
-                this.pagar();
+                this.comprar();
             } else {
                 console.log('Opção inválida. Tente novamente.');
                 this.alterarCarrinho();
@@ -197,39 +238,27 @@ class Supermercado {
 
     comprar() {
         this.boasVindas();
-        console.log('\nCatálogo de produtos:');
-        for (const [codigo, detalhes] of Object.entries(this.catalogo)) {
-            console.log(`${codigo} - ${detalhes.produto} - R$${detalhes.preço.toFixed(2)}`);
-        }
-
         console.log('\nEscolha uma opção:');
-        console.log('1 - Adicionar produto ao carrinho');
-        console.log('2 - Remover produto do carrinho');
-        console.log('3 - Finalizar compra');
+        console.log('1 - Cadastro/Login do Cliente');
+        console.log('2 - Entrar');
+        console.log('3 - Mostrar Catálogo de Produtos');
+        console.log('4 - Remover produto do carrinho');
+        console.log('5 - Finalizar Compra');
         console.log('Digite "sair" para encerrar o programa.');
 
         this.rl.question('Digite a opção desejada: ', (escolha) => {
             if (escolha === 'sair') {
                 this.rl.close();
             } else if (escolha === '1') {
-                this.rl.question('Digite o código do produto: ', (codigo) => {
-                    const cod = parseInt(codigo);
-                    this.rl.question('Digite a quantidade desejada: ', (quantidade) => {
-                        const quant = parseInt(quantidade);
-                        this.adicionarProduto(cod, quant);
-                        this.comprar();
-                    });
-                });
+                this.cadastrarCliente();
             } else if (escolha === '2') {
-                this.rl.question('Digite o código do produto a remover: ', (codigo) => {
-                    const cod = parseInt(codigo);
-                    this.rl.question('Digite a quantidade a remover: ', (quantidade) => {
-                        const quant = parseInt(quantidade);
-                        this.removerProduto(cod, quant);
-                        this.comprar();
-                    });
-                });
+                this.loginCliente();
             } else if (escolha === '3') {
+                this.mostrarCatalogo();
+                this.comprar(); 
+            } else if (escolha === '4') {
+                this.alterarCarrinho();
+            } else if (escolha === '5') {
                 this.pagar();
             } else {
                 console.log('Opção inválida. Tente novamente.');
