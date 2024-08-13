@@ -28,12 +28,18 @@ class Supermercado:
         print('Bem-vindo ao Mercado Dudão!')
         print('Você pode escolher os produtos do nosso catálogo a seguir.')
 
+    def atualizar_total(self):
+        """Atualiza o total da compra baseado no carrinho."""
+        self.total = sum(self.catalogo[codigo]['preço'] * quantidade
+                         for codigo, quantidade in self.carrinho.items())
+
     def adicionar_produto(self, codigo, quantidade):
         if codigo in self.catalogo:
             if codigo in self.carrinho:
                 self.carrinho[codigo] += quantidade
             else:
                 self.carrinho[codigo] = quantidade
+            self.atualizar_total()
             print(f'{quantidade} unidade(s) de {self.catalogo[codigo]["produto"]} adicionada(s) ao carrinho.')
         else:
             print('Produto não encontrado no catálogo.')
@@ -46,30 +52,30 @@ class Supermercado:
             else:
                 self.carrinho[codigo] -= quantidade
                 print(f'{quantidade} unidade(s) de {self.catalogo[codigo]["produto"]} removida(s) do carrinho.')
+            self.atualizar_total()
         else:
             print('Produto não encontrado no carrinho.')
 
     def resumir_compra(self):
         print('\nResumo da compra:')
-        self.total = 0.0
         for codigo, quantidade in self.carrinho.items():
             produto = self.catalogo[codigo]["produto"]
             preco_unitario = self.catalogo[codigo]["preço"]
             preco_total = preco_unitario * quantidade
             print(f'{quantidade} unidade(s) de {produto} - R${preco_total:.2f}')
-            self.total += preco_total
+        print(f'Total da compra - R${self.total:.2f}')
 
     def pagar(self):
         while True:
             self.resumir_compra()
-            
+
             print('\nEscolha uma opção:')
             print('1 - Pagar')
             print('2 - Alterar carrinho')
             print('3 - Cancelar compra')
-            
+
             escolha = input('Digite a opção desejada: ').strip().lower()
-            
+
             if escolha == '3':
                 print('Compra cancelada.')
                 self.carrinho = {}
@@ -88,7 +94,7 @@ class Supermercado:
                         else:
                             if troco > 0:
                                 print(f'Troco: R${troco:.2f}')
-                            
+
                             print('\nDeseja informar o CPF na nota?')
                             print('Digite "Sim" para informar o CPF ou "Não" para não informar.')
 
@@ -101,7 +107,7 @@ class Supermercado:
                             else:
                                 print('Opção inválida. Considerando CPF não informado.')
                                 cpf_info = 'CPF: Não informado'
-                            
+
                             print('\nNota Fiscal:')
                             print(f'Total da compra - R${self.total:.2f}')
                             print(cpf_info)
@@ -186,4 +192,3 @@ class Supermercado:
 
 mercado = Supermercado()
 mercado.comprar()
-
