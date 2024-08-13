@@ -125,7 +125,7 @@ def main():
     while True:
         print("1. Cadastrar Cliente")
         print("2. Entrar como Cliente")
-       def main():
+def main():
     while True:
         print("1. Cadastrar Cliente")
         print("2. Entrar como Cliente")
