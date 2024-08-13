@@ -3,6 +3,11 @@ clientes = {}
 def cadastrar_cliente():
     nome = input("Digite o nome do cliente: ")
     email = input("Digite o email do cliente: ")
+    
+    if not email.endswith('@gmail.com'):
+        print("O email deve ser do tipo @gmail.com. Cadastro não realizado.")
+        return
+    
     senha = input("Digite a senha do cliente: ")
     
     clientes[email] = {
@@ -17,6 +22,11 @@ def cadastrar_cliente():
 
 def entrar():
     email = input("Digite o email do cliente: ")
+    
+    if not email.endswith('@gmail.com'):
+        print("O email deve ser do tipo @gmail.com. Login não realizado.")
+        return
+    
     senha = input("Digite a senha do cliente: ")
     
     clientes_lidos = {}
