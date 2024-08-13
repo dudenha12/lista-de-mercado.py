@@ -1,0 +1,59 @@
+       while True:
+            print("1. Adicionar produto ao catálogo")
+            print("2. Remover produto do catálogo")
+            print("3. Ver histórico de compras dos clientes")
+            print("4. Sair")
+            
+            opcao = input("Digite a opção desejada: ")
+            
+            if opcao == "1":
+                adicionar_produto()
+            elif opcao == "2":
+                remover_produto()
+            elif opcao == "3":
+                ver_historico_compras()
+            elif opcao == "4":
+                print("Saindo do painel de administração. Até logo!")
+                break
+            else:
+                print("Opção inválida. Tente novamente.")
+    else:
+        print("Email ou senha incorretos. Tente novamente.")
+
+def adicionar_produto():
+    nome_produto = input("Digite o nome do produto: ")
+    preco_produto = float(input("Digite o preço do produto: "))
+    
+    with open("catalogo.txt", "a") as arquivo:
+        arquivo.write(f'Nome: {nome_produto}\nPreço: {preco_produto}\n\n')
+    
+    print("Produto adicionado ao catálogo com sucesso!")
+
+def remover_produto():
+    nome_produto = input("Digite o nome do produto a ser removido: ")
+    
+    try:
+        with open("catalogo.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+            for i in range(0, len(linhas), 2):
+                nome_lido = linhas[i].strip().split(": ")[1]
+                if nome_lido == nome_produto:
+                    del linhas[i:i+2]
+                    break
+            else:
+                print("Produto não encontrado no catálogo.")
+                return
+            
+        with open("catalogo.txt", "w") as arquivo:
+            arquivo.writelines(linhas)
+        
+        print("Produto removido do catálogo com sucesso!")
+    except FileNotFoundError:
+        print("Arquivo de catálogo não encontrado. Nenhum produto cadastrado.")
+
+def ver_historico_compras():
+    try:
+        with open("historico_compras.txt", "r") as arquivo:
+            print(arquivo.read())
+    except FileNotFoundError:
+        print("Arquivo de histórico de compras não encontrado. Nenhuma compra realizada.")
