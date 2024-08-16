@@ -1,25 +1,17 @@
 class Supermercado:
     def __init__(self):
         self.catalogo = {
-            1: {'produto': 'Arroz integral', 'preço': 10.0},
-            2: {'produto': 'Pote de sorvete de maracujá 3l', 'preço': 50.0},
-            3: {'produto': 'Pote de sorvete de chocolate 2l', 'preço': 25.0},
-            4: {'produto': 'Pote de sorvete de morango 3l', 'preço': 40.0},
-            5: {'produto': 'Coca-cola 2l', 'preço': 12.0},
-            6: {'produto': 'Fanta latinha', 'preço': 3.5},
-            7: {'produto': 'Guaraná latinha', 'preço': 4.5},
-            8: {'produto': 'Coca-cola latinha', 'preço': 5.0},
-            9: {'produto': 'Bolo de morango/inteiro', 'preço': 30.0},
-            10: {'produto': 'Bolo de chocolate/inteiro', 'preço': 40.0},
-            11: {'produto': 'Pão de queijo/cada', 'preço': 1.0},
-            12: {'produto': 'Feijão /kg', 'preço': 8.0},
-            13: {'produto': 'Carne de porco/2kg', 'preço': 30.0},
-            14: {'produto': 'Pacote de peito de frango', 'preço': 18.0},
-            15: {'produto': 'Cheetos assado/23g', 'preço': 6.0},
-            16: {'produto': 'Doritos', 'preço': 6.0},
-            17: {'produto': 'Fandangos', 'preço': 5.0},
-            18: {'produto': 'Nestle/clássico', 'preço': 3.5},
-            19: {'produto': 'Lacta/clássico', 'preço': 5.0}
+            1: {'produto': 'Batata Bem Brasil Hash Brown/1,06kg', 'preço': 11.10},
+            2: {'produto': 'Ketchup Hemmer Tradicional/1kg', 'preço': 30.45},
+            3: {'produto': 'Maionese Hemmer Tradicional/1g', 'preço': 16.80},
+            4: {'produto': 'Mostarda Amarela Hemmer/1g', 'preço': 19.00},
+            5: {'produto': 'Arroz Branco/5kg', 'preço': 30.00},
+            6: {'produto': 'Biscoito Princesa Sortido/400g', 'preço': 29.80},
+            7: {'produto': 'Biscoito de Manteiga Doce Magia Hansen/300g', 'preço': 12.90},
+            8: {'produto': 'Coca Cola Original/2l', 'preço': 11.00},
+            9: {'produto': 'Coca Cola Original lata/350ml', 'preço': 4.00},
+            10: {'produto': 'Coca Cola Zero lata/350ml', 'preço': 3.50},
+            11: {'produto': 'Pão de Queijo Grande/cada', 'preço': 1.00}
         }
         self.carrinho = {}
         self.total = 0.0
