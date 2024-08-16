@@ -48,8 +48,8 @@ def entrar():
         print("Login efetuado com sucesso!")
 
         import mercado
-        mercado = mercado.Supermercado() 
-        mercado.comprar()
+        mercado 
+       
     else:
         print("Email ou senha incorretos. Tente novamente.")
 
