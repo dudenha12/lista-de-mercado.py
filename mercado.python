@@ -162,6 +162,7 @@ class Supermercado:
             print('1 - Adicionar produto ao carrinho')
             print('2 - Remover produto do carrinho')
             print('3 - Finalizar compra')
+            print('4 - Entrar como administrador')
             print('Digite "sair" para encerrar o programa.')
 
             escolha = input('Digite a opção desejada: ').strip().lower()
@@ -178,9 +179,77 @@ class Supermercado:
                 self.remover_produto(codigo, quantidade)
             elif escolha == '3':
                 self.pagar()
-                break
+            elif escolha == '4':
+                self.entrar_admin()  # Entrar no painel de administração
             else:
                 print('Opção inválida. Tente novamente.')
 
-mercado = Supermercado()
-mercado.comprar()
+    def entrar_admin(self):
+        email = input("Digite o email do administrador: ")
+        senha = input("Digite a senha do administrador: ")
+        
+        if email == "admin@gmail.com" and senha == "admin":
+            print("Login efetuado com sucesso!")
+            while True:
+                print("1. Adicionar produto ao catálogo")
+                print("2. Remover produto do catálogo")
+                print("3. Ver histórico de compras dos clientes")
+                print("4. Sair do painel de administração")
+                
+                opcao = input("Digite a opção desejada: ")
+                
+                if opcao == "1":
+                    self.adicionar_produto_admin()
+                elif opcao == "2":
+                    self.remover_produto_admin()
+                elif opcao == "3":
+                    self.ver_historico_compras()
+                elif opcao == "4":
+                    print("Saindo do painel de administração. Voltando ao menu principal.")
+                    break
+                else:
+                    print("Opção inválida. Tente novamente.")
+        else:
+            print("Email ou senha incorretos. Tente novamente.")
+
+    def adicionar_produto_admin(self):
+        nome_produto = input("Digite o nome do produto: ")
+        preco_produto = float(input("Digite o preço do produto: "))
+        codigo = max(self.catalogo.keys(), default=0) + 1
+        
+        self.catalogo[codigo] = {
+            'produto': nome_produto,
+            'preço': preco_produto
+        }
+        
+        with open("catalogo.txt", "a") as arquivo:
+            arquivo.write(f'{codigo} - {nome_produto} - R${preco_produto:.2f}\n')
+        
+        print("Produto adicionado ao catálogo com sucesso!")
+
+    def remover_produto_admin(self):
+        codigo = int(input("Digite o código do produto a ser removido: "))
+        
+        if codigo in self.catalogo:
+            del self.catalogo[codigo]
+            
+            with open("catalogo.txt", "w") as arquivo:
+                for cod, detalhes in self.catalogo.items():
+                    arquivo.write(f'{cod} - {detalhes["produto"]} - R${detalhes["preço"]:.2f}\n')
+            
+            print("Produto removido do catálogo com sucesso!")
+        else:
+            print("Código de produto não encontrado no catálogo.")
+
+    def ver_historico_compras(self):
+        try:
+            with open("notafiscal.txt", "r") as arquivo:
+                print(arquivo.read())
+        except FileNotFoundError:
+            print("Arquivo de histórico de compras não encontrado. Nenhuma compra realizada.")
+
+if __name__ == "__main__":
+    mercado = Supermercado()
+    mercado.comprar()
+
+
