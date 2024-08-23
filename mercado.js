@@ -22,7 +22,6 @@ class Supermercado {
         return { id: parseInt(id), nome, preco: parseFloat(preco) };
       });
     } catch (error) {
-      console.log('Arquivo de catálogo não encontrado. Usando catálogo padrão.');
       return [
         { id: 1, nome: 'Batata Bem Brasil Hash Brown/1,06kg', preco: 11.10 },
         { id: 2, nome: 'Ketchup Hemmer Tradicional/1kg', preco: 30.45 },
@@ -36,11 +35,11 @@ class Supermercado {
   salvarCatalogo() {
     const data = this.catalogo.map(p => `${p.id} - ${p.nome} - ${p.preco.toFixed(2)}`).join('\n');
     fs.writeFileSync('catalogo.txt', data, 'utf8');
-    console.log('Catálogo salvo com sucesso!');
+    console.log('Catálogo salvo com sucesso!')
   }
 
   boasVindas() {
-    console.log('Bem-vindo ao Supermercado!');
+    console.log('Bem-vindo ao Super Mercadudismo!');
     console.log('Escolha uma opção:');
     console.log('1 - Logar como cliente');
     console.log('2 - Logar como administrador');
