@@ -48,7 +48,7 @@ def entrar():
         print("Login efetuado com sucesso!")
 
         import mercado
-        mercado.comprar()
+        mercado()
         
     else:
         print("Email ou senha incorretos. Tente novamente.")
@@ -93,9 +93,16 @@ def ver_historico_compras():
 
 def main():
     while True:
-        print("1. Cadastrar Cliente")
-        print("2. Entrar como Cliente")
-        print("3. Sair")
+        print('┌──────────────────────────────────┐')
+        print("│1 - Cadastro do Cliente           │")
+        print('└──────────────────────────────────┘')
+        print('┌──────────────────────────────────┐')
+        print("│2 - Entrar como Cliente           │")
+        print('└──────────────────────────────────┘')
+        print('┌──────────────────────────────────┐')
+        print("│3 - Sair                          │")
+        print('└──────────────────────────────────┘')
+
         
         opcao = input("Digite a opção desejada: ")
         
