@@ -2,14 +2,19 @@ clientes = {}
 
 def cadastrar_cliente():
     nome = input("Digite o nome do cliente: ")
+    print('──────────────────────')
     email = input("Digite o email do cliente: ")
+    print('──────────────────────')
     
     if not email.endswith('@gmail.com'):
-        print("O email deve ser do tipo @gmail.com. Cadastro não realizado.")
+        print('──────────────────────')
+        print("O email deve ser do tipo @gmail.com. Cadastro não realizado ⚠️ ")
+        print('──────────────────────')
         return
-    
+
     senha = input("Digite a senha do cliente: ")
-    
+    print('──────────────────────')
+
     clientes[email] = {
         "nome": nome,
         "senha": senha
@@ -17,18 +22,22 @@ def cadastrar_cliente():
     
     with open("clientes.txt", "a") as arquivo:
         arquivo.write(f'Email: {email}\nNome: {nome}\nSenha: {senha}\n\n')
-    
+
     print("Cliente cadastrado com sucesso!")
+    print('──────────────────────')
 
 def entrar():
     email = input("Digite o email do cliente: ")
+    print('──────────────────────')
     
     if not email.endswith('@gmail.com'):
         print("O email deve ser do tipo @gmail.com. Login não realizado.")
+        print('──────────────────────')
         return 
     
     senha = input("Digite a senha do cliente: ")
-    
+    print('──────────────────────')
+
     clientes_lidos = {}
     try:
         with open("clientes.txt", "r") as arquivo:
@@ -42,28 +51,38 @@ def entrar():
                     "senha": senha_lida
                 }
     except FileNotFoundError:
+        print('──────────────────────')
         print("Arquivo de clientes não encontrado. Nenhum cliente cadastrado.")
+        print('──────────────────────')
     
     if email in clientes_lidos and clientes_lidos[email]["senha"] == senha:
+        print('──────────────────────')
         print("Login efetuado com sucesso!")
-
-        import mercado
-        mercado()
+        print('──────────────────────')
         
     else:
+        print('──────────────────────')
         print("Email ou senha incorretos. Tente novamente.")
+        print('──────────────────────')
 
 def adicionar_produto():
+    print('──────────────────────')
     nome_produto = input("Digite o nome do produto: ")
+    print('──────────────────────')
     preco_produto = float(input("Digite o preço do produto: "))
+    print('──────────────────────')
     
     with open("catalogo.txt", "a") as arquivo:
         arquivo.write(f'Nome: {nome_produto}\nPreço: {preco_produto}\n\n')
-    
+
+    print('──────────────────────')
     print("Produto adicionado ao catálogo com sucesso!")
+    print('──────────────────────')
 
 def remover_produto():
+    print('──────────────────────')
     nome_produto = input("Digite o nome do produto a ser removido: ")
+    print('──────────────────────')
     
     try:
         with open("catalogo.txt", "r") as arquivo:
@@ -73,23 +92,31 @@ def remover_produto():
                 if nome_lido == nome_produto:
                     del linhas[i:i+2]
                     break
-            else:
+            else: 
+                print('──────────────────────')
                 print("Produto não encontrado no catálogo.")
+                print('──────────────────────')
                 return
             
         with open("catalogo.txt", "w") as arquivo:
             arquivo.writelines(linhas)
         
+        print('──────────────────────')
         print("Produto removido do catálogo com sucesso!")
+        print('──────────────────────')
     except FileNotFoundError:
+        print('──────────────────────')
         print("Arquivo de catálogo não encontrado. Nenhum produto cadastrado.")
+        print('──────────────────────')
 
 def ver_historico_compras():
     try:
         with open("historico_compras.txt", "r") as arquivo:
             print(arquivo.read())
     except FileNotFoundError:
+        print('──────────────────────')
         print("Arquivo de histórico de compras não encontrado. Nenhuma compra realizada.")
+        print('──────────────────────')
 
 def main():
     while True:
@@ -103,18 +130,24 @@ def main():
         print("│3 - Sair                          │")
         print('└──────────────────────────────────┘')
 
-        
+        print('──────────────────────')
         opcao = input("Digite a opção desejada: ")
-        
+        print('──────────────────────')
+
         if opcao == "1":
             cadastrar_cliente()
         elif opcao == "2":
             entrar()
         elif opcao == "3":
+            print('──────────────────────')
             print("Saindo do sistema. Até logo!")
+            print('──────────────────────')
             break
         else:
+            print('──────────────────────')
             print("Opção inválida. Tente novamente.")
+            print('──────────────────────')
 
 if __name__ == "__main__":
     main()
+
