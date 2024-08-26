@@ -17,7 +17,7 @@ class Supermercado {
   carregarCatalogo() {
     try {
       const data = fs.readFileSync('catalogo.txt', 'utf8');
-      return data.split('\n').map((line, index) => {
+      return data.split('\n').map((line) => {
         const [id, nome, preco] = line.split(' - ');
         return { id: parseInt(id), nome, preco: parseFloat(preco) };
       });
@@ -35,25 +35,29 @@ class Supermercado {
   salvarCatalogo() {
     const data = this.catalogo.map(p => `${p.id} - ${p.nome} - ${p.preco.toFixed(2)}`).join('\n');
     fs.writeFileSync('catalogo.txt', data, 'utf8');
-    console.log('Catálogo salvo com sucesso!')
+    console.log('Catálogo salvo com sucesso!');
   }
 
   boasVindas() {
     console.log('Bem-vindo ao Super Mercadudismo!');
     console.log('Escolha uma opção:');
-    console.log('1 - Logar como cliente');
-    console.log('2 - Logar como administrador');
-    console.log('3 - Sair');
+    console.log('1 - Cadastrar como cliente');
+    console.log('2 - Logar como cliente');
+    console.log('3 - Logar como administrador');
+    console.log('4 - Sair');
 
     this.rl.question('Digite a opção desejada: ', (escolha) => {
       switch (escolha) {
         case '1':
-          this.logarComoCliente();
+          this.cadastrarCliente();
           break;
         case '2':
-          this.logarComoAdmin();
+          this.logarComoCliente();
           break;
         case '3':
+          this.logarComoAdmin();
+          break;
+        case '4':
           console.log('Saindo...');
           this.rl.close();
           break;
@@ -64,16 +68,20 @@ class Supermercado {
     });
   }
 
-  logarComoCliente() {
+  cadastrarCliente() {
     this.rl.question('Digite seu e-mail (@gmail.com): ', (email) => {
       if (this.validarEmail(email)) {
         this.rl.question('Digite sua senha: ', (senha) => {
-          this.cliente = { email, senha };
-          this.mostrarCatalogo();
+          this.rl.question('Digite seu nome: ', (nome) => {
+            this.adicionarCliente(email, senha, nome, () => {
+              console.log('Cadastro realizado com sucesso!');
+              this.boasVindas();
+            });
+          });
         });
       } else {
         console.log('Email inválido. O e-mail deve estar no formato "usuario@gmail.com".');
-        this.logarComoCliente();
+        this.cadastrarCliente();
       }
     });
   }
@@ -82,8 +90,82 @@ class Supermercado {
     return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
   }
 
+  adicionarCliente(email, senha, nome, callback) {
+    fs.readFile('clientes.txt', 'utf8', (err, data) => {
+      if (err && err.code !== 'ENOENT') {
+        console.log('Erro ao ler o arquivo de clientes:', err);
+        callback();
+        return;
+      }
+      
+      const clientes = data ? data.split('\n').reduce((acc, line, index, lines) => {
+        if (line.startsWith('Email:')) {
+          const clienteEmail = line.split(': ')[1];
+          const clienteNome = lines[index + 1].split(': ')[1];
+          const clienteSenha = lines[index + 2].split(': ')[1];
+          acc[clienteEmail] = { nome: clienteNome, senha: clienteSenha };
+        }
+        return acc;
+      }, {}) : {};
+
+      if (clientes[email]) {
+        console.log('E-mail já cadastrado.');
+        callback();
+        return;
+      }
+
+      const novoCliente = `Email: ${email}\nNome: ${nome}\nSenha: ${senha}\n`;
+      fs.appendFile('clientes.txt', novoCliente, (err) => {
+        if (err) {
+          console.log('Erro ao salvar cliente:', err);
+        }
+        callback();
+      });
+    });
+  }
+
+  logarComoCliente() {
+    this.rl.question('Digite seu e-mail (@gmail.com): ', (email) => {
+      if (this.validarEmail(email)) {
+        this.rl.question('Digite sua senha: ', (senha) => {
+          this.validarCliente(email, senha, (clienteAutenticado) => {
+            if (clienteAutenticado) {
+              this.cliente = { email, senha };
+              this.mostrarCatalogo();
+            } else {
+              console.log('Email ou senha inválidos.');
+              this.logarComoCliente();
+            }
+          });
+        });
+      } else {
+        console.log('Email inválido. O e-mail deve estar no formato "usuario@gmail.com".');
+        this.logarComoCliente();
+      }
+    });
+  }
+
+  validarCliente(email, senha, callback) {
+    fs.readFile('clientes.txt', 'utf8', (err, data) => {
+      if (err) {
+        console.log('Erro ao ler o arquivo de clientes:', err);
+        callback(false);
+        return;
+      }
+      const clientes = data.split('\n').reduce((acc, line, index, lines) => {
+        if (line.startsWith('Email:')) {
+          const clienteEmail = line.split(': ')[1];
+          const clienteNome = lines[index + 1].split(': ')[1];
+          const clienteSenha = lines[index + 2].split(': ')[1];
+          acc[clienteEmail] = { nome: clienteNome, senha: clienteSenha };
+        }
+        return acc;
+      }, {});
+      callback(clientes[email] && clientes[email].senha === senha);
+    });
+  }
+
   logarComoAdmin() {
-    console.log('Logando como administrador...');
     this.rl.question('Digite sua senha: ', (senha) => {
       if (senha === 'admin') {
         this.adminLogado = true;
@@ -325,3 +407,4 @@ class Supermercado {
 
 const supermercado = new Supermercado();
 supermercado.boasVindas();
+
